@@ -1,541 +1,509 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Спасение Ледников Алматы | Проект Геотекстиль</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-    <!-- Навигация -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">
-                    <i class="fas fa-mountain"></i>
-                    <span>Glacier Shield</span>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="#hero">Главная</a></li>
-                    <li><a href="#problem">Проблема</a></li>
-                    <li><a href="#solution">Решение</a></li>
-                    <li><a href="#geotextile">Геотекстиль</a></li>
-                    <li><a href="#results">Результаты</a></li>
-                    <li><a href="#ai-analyzer">AI Анализ</a></li>
-                </ul>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
+// ============ НАВИГАЦИЯ ============
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const navMenu = document.querySelector('.nav-menu');
+
+if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+}
+
+// Закрыть мобильное меню при клике на ссылку
+document.querySelectorAll('.nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            navMenu.classList.remove('active');
+        }
+    });
+});
+
+// Плавная прокрутка
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// ============ ГРАФИК ТАЯНИЯ ============
+const ctx = document.getElementById('meltingChart');
+if (ctx) {
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Май', 'Июнь', 'Июль', 'Август', 'Сентябрь'],
+            datasets: [
+                {
+                    label: 'Без защиты (см таяния)',
+                    data: [12, 18, 22, 20, 15],
+                    borderColor: '#EF4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'С геотекстилем (см таяния)',
+                    data: [5, 7, 8, 7, 5],
+                    borderColor: '#0066FF',
+                    backgroundColor: 'rgba(0, 102, 255, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Таяние (см/день)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+// ============ AI АНАЛИЗАТОР ИЗОБРАЖЕНИЙ ============
+const glacierImageInput = document.getElementById('glacierImageInput');
+const cameraInput = document.getElementById('cameraInput');
+const uploadArea = document.getElementById('uploadArea');
+const aiResult = document.getElementById('aiResult');
+const uploadedImage = document.getElementById('uploadedImage');
+const analysisResult = document.getElementById('analysisResult');
+
+// Обработка загрузки файла
+if (glacierImageInput) {
+    glacierImageInput.addEventListener('change', handleImageUpload);
+}
+
+if (cameraInput) {
+    cameraInput.addEventListener('change', handleImageUpload);
+}
+
+// Drag and drop
+if (uploadArea) {
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#00C9FF';
+        uploadArea.style.background = '#FFFFFF';
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = '#0066FF';
+        uploadArea.style.background = '#E3F2FD';
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#0066FF';
+        uploadArea.style.background = '#E3F2FD';
+        
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            processImage(file);
+        }
+    });
+}
+
+async function handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (file) {
+        processImage(file);
+    }
+}
+
+async function processImage(file) {
+    // Показать результат
+    aiResult.style.display = 'grid';
+    uploadedImage.src = URL.createObjectURL(file);
+    
+    // Показать загрузку
+    analysisResult.innerHTML = `
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>AI анализирует изображение...</p>
         </div>
-    </nav>
+    `;
+    
+    // Конвертировать в base64
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        const base64Data = e.target.result.split(',')[1];
+        await analyzeGlacierImage(base64Data);
+    };
+    reader.readAsDataURL(file);
+}
 
-    <!-- Герой секция -->
-    <section id="hero" class="hero">
-        <div class="hero-overlay"></div>
-        <div class="container hero-content">
-            <h1 class="hero-title">Спасём Ледники Алматы</h1>
-            <p class="hero-subtitle">Инновационное решение глобальной проблемы таяния ледников</p>
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <i class="fas fa-temperature-high"></i>
-                    <h3>+2.5°C</h3>
-                    <p>Повышение температуры</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-water"></i>
-                    <h3>30%</h3>
-                    <p>Потеря массы за 50 лет</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3>15</h3>
-                    <p>Ледников под угрозой</p>
-                </div>
+async function analyzeGlacierImage(base64Data) {
+    try {
+        const response = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 1000,
+                messages: [
+                    {
+                        role: "user",
+                        content: [
+                            {
+                                type: "image",
+                                source: {
+                                    type: "base64",
+                                    media_type: "image/jpeg",
+                                    data: base64Data
+                                }
+                            },
+                            {
+                                type: "text",
+                                text: `Проанализируй это изображение и ответь ТОЛЬКО в формате JSON без каких-либо дополнительных слов или markdown форматирования:
+
+{
+  "isGlacier": true/false,
+  "glacierName": "название или 'Неизвестный ледник'",
+  "condition": "отличное/хорошее/удовлетворительное/критическое",
+  "meltingRate": "низкая/средняя/высокая/критическая",
+  "needsGeotextile": true/false,
+  "geotextileArea": "площадь в кв.м или 'не требуется'",
+  "riskLevel": "низкий/средний/высокий/критический",
+  "recommendations": "краткие рекомендации на русском",
+  "confidence": число от 0 до 100
+}
+
+Если на изображении НЕТ ледника, верни: {"isGlacier": false, "message": "На изображении не обнаружен ледник"}`
+                            }
+                        ]
+                    }
+                ]
+            })
+        });
+
+        const data = await response.json();
+        const textContent = data.content.find(item => item.type === "text")?.text || "";
+        
+        // Извлечь JSON
+        const jsonMatch = textContent.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+            throw new Error("Не удалось получить корректный ответ от AI");
+        }
+        
+        const result = JSON.parse(jsonMatch[0]);
+        displayAnalysisResult(result);
+    } catch (err) {
+        console.error("Analysis error:", err);
+        analysisResult.innerHTML = `
+            <div style="padding: 2rem; text-align: center; color: #EF4444;">
+                <i class="fas fa-exclamation-circle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <p><strong>Ошибка при анализе</strong></p>
+                <p>Попробуйте еще раз или загрузите другое изображение.</p>
             </div>
-            <a href="#problem" class="hero-button">Узнать больше</a>
-        </div>
-        <div class="hero-scroll">
-            <i class="fas fa-chevron-down"></i>
-        </div>
-    </section>
+        `;
+    }
+}
 
-    <!-- Проблема -->
-    <section id="problem" class="section problem-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Кризис Ледников Алматы</h2>
-                <p>Почему это касается каждого из нас</p>
+function displayAnalysisResult(result) {
+    if (!result.isGlacier) {
+        analysisResult.innerHTML = `
+            <div style="padding: 2rem; text-align: center;">
+                <i class="fas fa-times-circle" style="font-size: 4rem; color: #F59E0B; margin-bottom: 1rem;"></i>
+                <h3 style="color: #F59E0B; margin-bottom: 1rem;">Ледник не обнаружен</h3>
+                <p style="color: #4A5568;">${result.message || 'На изображении не обнаружен ледник. Пожалуйста, загрузите фотографию ледника.'}</p>
             </div>
+        `;
+        return;
+    }
 
-            <div class="problem-grid">
-                <div class="problem-card">
-                    <div class="problem-icon">
-                        <i class="fas fa-city"></i>
-                    </div>
-                    <h3>Водоснабжение города</h3>
-                    <p>Ледники обеспечивают <strong>70% питьевой воды</strong> для Алматы и окрестностей. Таяние ледников угрожает водоснабжению 2 миллионов человек.</p>
-                    <div class="problem-stat">2 млн человек под угрозой</div>
-                </div>
+    const riskColors = {
+        'низкий': '#10B981',
+        'средний': '#F59E0B',
+        'высокий': '#F97316',
+        'критический': '#EF4444'
+    };
 
-                <div class="problem-card">
-                    <div class="problem-icon">
-                        <i class="fas fa-house-flood"></i>
-                    </div>
-                    <h3>Селевые потоки</h3>
-                    <p>Ускоренное таяние создаёт <strong>селевые озёра</strong>, которые могут прорваться и затопить город. В 1973 году сель уничтожил часть Алматы.</p>
-                    <div class="problem-stat">8 селевых озёр наблюдается</div>
-                </div>
+    const conditionColors = {
+        'отличное': '#10B981',
+        'хорошее': '#0066FF',
+        'удовлетворительное': '#F59E0B',
+        'критическое': '#EF4444'
+    };
 
-                <div class="problem-card">
-                    <div class="problem-icon">
-                        <i class="fas fa-temperature-arrow-up"></i>
-                    </div>
-                    <h3>Климатические изменения</h3>
-                    <p>За последние 50 лет температура в регионе выросла на <strong>2.5°C</strong>. Ледники тают в 3 раза быстрее, чем 30 лет назад.</p>
-                    <div class="problem-stat">x3 скорость таяния</div>
-                </div>
-
-                <div class="problem-card">
-                    <div class="problem-icon">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h3>Экосистема</h3>
-                    <p>Исчезновение ледников нарушает <strong>экологический баланс</strong> региона, влияет на флору, фауну и микроклимат всего Заилийского Алатау.</p>
-                    <div class="problem-stat">15 видов под угрозой</div>
-                </div>
+    analysisResult.innerHTML = `
+        <div style="padding: 2rem;">
+            <h3 style="color: #0066FF; margin-bottom: 2rem; font-size: 1.5rem;">
+                <i class="fas fa-chart-line"></i> Результаты анализа
+            </h3>
+            
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 10px;">
+                <p style="color: #4A5568; font-size: 0.9rem; margin-bottom: 0.5rem;">Ледник</p>
+                <p style="color: #1A202C; font-size: 1.3rem; font-weight: bold;">${result.glacierName}</p>
             </div>
-
-            <!-- Интерактивная статистика -->
-            <div class="stats-showcase">
-                <h3>Масштаб проблемы в цифрах</h3>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-circle">
-                            <svg viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="45" class="stat-bg"></circle>
-                                <circle cx="50" cy="50" r="45" class="stat-progress" style="--progress: 30"></circle>
-                            </svg>
-                            <span class="stat-number">30%</span>
-                        </div>
-                        <p>Потеря массы ледников</p>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-circle">
-                            <svg viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="45" class="stat-bg"></circle>
-                                <circle cx="50" cy="50" r="45" class="stat-progress" style="--progress: 70"></circle>
-                            </svg>
-                            <span class="stat-number">70%</span>
-                        </div>
-                        <p>Зависимость от ледниковой воды</p>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-circle">
-                            <svg viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="45" class="stat-bg"></circle>
-                                <circle cx="50" cy="50" r="45" class="stat-progress" style="--progress: 85"></circle>
-                            </svg>
-                            <span class="stat-number">85%</span>
-                        </div>
-                        <p>Риск дефицита воды к 2050 году</p>
-                    </div>
-                </div>
+            
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 10px;">
+                <p style="color: #4A5568; font-size: 0.9rem; margin-bottom: 0.5rem;">Состояние</p>
+                <p style="color: ${conditionColors[result.condition]}; font-size: 1.2rem; font-weight: bold; text-transform: uppercase;">
+                    ${result.condition}
+                </p>
             </div>
-        </div>
-    </section>
-
-    <!-- Решение -->
-    <section id="solution" class="section solution-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Наше Инновационное Решение</h2>
-                <p>Геотекстиль - технология спасения ледников</p>
+            
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: white; border-radius: 10px;">
+                <p style="color: #4A5568; font-size: 0.9rem; margin-bottom: 0.5rem;">Скорость таяния</p>
+                <p style="color: #1A202C; font-size: 1.1rem; font-weight: 600;">${result.meltingRate}</p>
             </div>
-
-            <div class="solution-content">
-                <div class="solution-video">
-                    <div class="video-placeholder">
-                    
-                        <img src="./images/WhatsApp Image 2026-02-12 at 08.07.13.jpeg" alt="">
-                    </div>
-                </div>
-
-                <div class="solution-text">
-                    <h3>Что такое геотекстиль?</h3>
-                    <p>Геотекстиль - это специальное <strong>белое полотно</strong>, которым мы покрываем поверхность ледника. Это простое, но невероятно эффективное решение!</p>
-                    
-                    <div class="solution-benefits">
-                        <div class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h4>Отражает солнечные лучи</h4>
-                                <p>Белая поверхность отражает до 90% солнечного излучения</p>
-                            </div>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h4>Снижает таяние на 60-70%</h4>
-                                <p>Под полотном температура ниже на 5-7°C</p>
-                            </div>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h4>Экологически безопасен</h4>
-                                <p>Не выделяет вредных веществ, полностью безопасен</p>
-                            </div>
-                        </div>
-                        <div class="benefit-item">
-                            <i class="fas fa-check-circle"></i>
-                            <div>
-                                <h4>Долговечность 5-10 лет</h4>
-                                <p>Устойчив к ветру, снегу и ультрафиолету</p>
-                            </div>
-                        </div>
+            
+            <div style="margin-bottom: 1.5rem; padding: 1rem; background: ${riskColors[result.riskLevel]}22; border: 2px solid ${riskColors[result.riskLevel]}; border-radius: 10px;">
+                <p style="color: #4A5568; font-size: 0.9rem; margin-bottom: 0.5rem;">Уровень риска</p>
+                <p style="color: ${riskColors[result.riskLevel]}; font-size: 1.2rem; font-weight: bold; text-transform: uppercase;">
+                    ${result.riskLevel}
+                </p>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem; padding: 1.5rem; background: ${result.needsGeotextile ? '#FFF7ED' : '#F0FDF4'}; border: 2px solid ${result.needsGeotextile ? '#F59E0B' : '#10B981'}; border-radius: 10px;">
+                <div style="display: flex; align-items: start; gap: 1rem;">
+                    <i class="fas ${result.needsGeotextile ? 'fa-exclamation-triangle' : 'fa-check-circle'}" 
+                       style="font-size: 2rem; color: ${result.needsGeotextile ? '#F59E0B' : '#10B981'};"></i>
+                    <div>
+                        <h4 style="color: ${result.needsGeotextile ? '#92400E' : '#065F46'}; margin-bottom: 0.5rem; font-size: 1.2rem;">
+                            ${result.needsGeotextile ? 'Требуется геотекстиль' : 'Геотекстиль не требуется'}
+                        </h4>
+                        ${result.needsGeotextile ? `
+                            <p style="color: #78350F;">
+                                Рекомендуемая площадь: <strong>${result.geotextileArea}</strong>
+                            </p>
+                        ` : ''}
                     </div>
                 </div>
             </div>
-
-            <!-- Сравнение -->
-            <div class="comparison">
-                <h3>Сравнение: С геотекстилем и без</h3>
-                <div class="comparison-grid">
-                    <div class="comparison-card without">
-                        <h4><i class="fas fa-times-circle"></i> Без защиты</h4>
-                        <div class="comparison-image">
-                            <i class="fas fa-sun"></i>
-                            <p>Прямое солнечное излучение</p>
-                        </div>
-                        <ul>
-                            <li>Таяние: <strong>15-20 см/день</strong></li>
-                            <li>Температура: <strong>+5°C до +10°C</strong></li>
-                            <li>Потеря массы: <strong>3-5 м³/день</strong></li>
-                            <li>Срок жизни: <strong>сокращается</strong></li>
-                        </ul>
-                    </div>
-                    <div class="comparison-card with">
-                        <h4><i class="fas fa-check-circle"></i> С геотекстилем</h4>
-                        <div class="comparison-image protected">
-                            <i class="fas fa-shield-alt"></i>
-                            <p>Защита от солнца</p>
-                        </div>
-                        <ul>
-                            <li>Таяние: <strong>5-7 см/день</strong> ✓</li>
-                            <li>Температура: <strong>-2°C до +3°C</strong> ✓</li>
-                            <li>Потеря массы: <strong>1-1.5 м³/день</strong> ✓</li>
-                            <li>Срок жизни: <strong>продлевается</strong> ✓</li>
-                        </ul>
-                    </div>
-                </div>
+            
+            <div style="margin-bottom: 1.5rem; padding: 1.5rem; background: white; border-radius: 10px; border-left: 4px solid #0066FF;">
+                <h4 style="color: #0066FF; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-lightbulb"></i> Рекомендации
+                </h4>
+                <p style="color: #4A5568; line-height: 1.6;">${result.recommendations}</p>
             </div>
-        </div>
-    </section>
-
-    <!-- Геотекстиль подробно -->
-    <section id="geotextile" class="section geotextile-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Почему именно это полотно?</h2>
-                <p>Научный подход к выбору материала</p>
-            </div>
-
-            <div class="geotextile-details">
-                <div class="detail-card">
-                    <div class="detail-icon">
-                        <i class="fas fa-microscope"></i>
+            
+            <div style="padding: 1rem; background: white; border-radius: 10px;">
+                <p style="color: #4A5568; font-size: 0.9rem; margin-bottom: 0.5rem;">Точность анализа</p>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="flex: 1; background: #E3F2FD; height: 10px; border-radius: 5px; overflow: hidden;">
+                        <div style="width: ${result.confidence}%; height: 100%; background: linear-gradient(135deg, #0066FF 0%, #00C9FF 100%); transition: width 1s ease;"></div>
                     </div>
-                    <h3>Научные исследования</h3>
-                    <p>Мы изучили <strong>15 различных материалов</strong> и провели испытания в реальных условиях на леднике Туюксу в течение 2 лет.</p>
-                </div>
-
-                <div class="detail-card">
-                    <div class="detail-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <h3>Трёхслойная структура</h3>
-                    <p>Наш геотекстиль состоит из трёх слоёв: <strong>отражающий</strong>, <strong>изолирующий</strong> и <strong>дренажный</strong>. Каждый слой выполняет свою функцию.</p>
-                </div>
-
-                <div class="detail-card">
-                    <div class="detail-icon">
-                        <i class="fas fa-sun"></i>
-                    </div>
-                    <h3>Альбедо 0.85-0.90</h3>
-                    <p><strong>Альбедо</strong> - это способность поверхности отражать свет. У снега альбедо 0.80, у нашего полотна - 0.85-0.90! Это выше, чем у чистого снега.</p>
-                </div>
-
-                <div class="detail-card">
-                    <div class="detail-icon">
-                        <i class="fas fa-wind"></i>
-                    </div>
-                    <h3>Устойчивость к ветру</h3>
-                    <p>Специальная система крепления выдерживает ветер до <strong>120 км/ч</strong>. Полотно надёжно фиксируется на поверхности ледника.</p>
-                </div>
-
-                <div class="detail-card">
-                    <div class="detail-icon">
-                        <i class="fas fa-droplet"></i>
-                    </div>
-                    <h3>Дренажная система</h3>
-                    <p>Нижний слой обеспечивает <strong>отвод талой воды</strong>, предотвращая образование луж под полотном, которые могли бы ускорить таяние.</p>
-                </div>
-
-                <div class="detail-card">
-                    <div class="detail-icon">
-                        <i class="fas fa-recycle"></i>
-                    </div>
-                    <h3>Экологичность</h3>
-                    <p>Материал не содержит вредных веществ, <strong>полностью перерабатывается</strong> и не наносит вреда окружающей среде.</p>
-                </div>
-            </div>
-
-            <!-- Технические характеристики -->
-            <div class="tech-specs">
-                <h3>Технические характеристики нашего геотекстиля</h3>
-                <div class="specs-grid">
-                    <div class="spec-item">
-                        <strong>Плотность:</strong>
-                        <span>200-250 г/м²</span>
-                    </div>
-                    <div class="spec-item">
-                        <strong>Толщина:</strong>
-                        <span>3-5 мм</span>
-                    </div>
-                    <div class="spec-item">
-                        <strong>Цвет:</strong>
-                        <span>Белый (RAL 9010)</span>
-                    </div>
-                    <div class="spec-item">
-                        <strong>Альбедо:</strong>
-                        <span>0.85-0.90</span>
-                    </div>
-                    <div class="spec-item">
-                        <strong>Прочность:</strong>
-                        <span>15-20 кН/м</span>
-                    </div>
-                    <div class="spec-item">
-                        <strong>Срок службы:</strong>
-                        <span>5-10 лет</span>
-                    </div>
-                    <div class="spec-item">
-                        <strong>Температура:</strong>
-                        <span>-40°C до +60°C</span>
-                    </div>
-                    <div class="spec-item">
-                        <strong>Водопроницаемость:</strong>
-                        <span>Нижний слой</span>
-                    </div>
+                    <span style="font-weight: bold; color: #0066FF; font-size: 1.1rem;">${result.confidence}%</span>
                 </div>
             </div>
         </div>
-    </section>
+    `;
+}
 
-    <!-- Результаты -->
-    <section id="results" class="section results-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Реальные Результаты</h2>
-                <p>Данные с наших тестовых участков</p>
-            </div>
+// ============ AI ЧАТ-ПОМОЩНИК ============
+const chatFab = document.getElementById('chatFab');
+const chatWidget = document.getElementById('aiChatWidget');
+const chatToggle = document.getElementById('chatToggle');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+const chatMessages = document.getElementById('chatMessages');
 
-            <div class="results-grid">
-                <div class="result-card">
-                    <div class="result-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="result-number">-65%</h3>
-                    <p>Снижение скорости таяния на покрытых участках</p>
-                </div>
-                <div class="result-card">
-                    <div class="result-icon">
-                        <i class="fas fa-temperature-low"></i>
-                    </div>
-                    <h3 class="result-number">-7°C</h3>
-                    <p>Снижение температуры поверхности ледника</p>
-                </div>
-                <div class="result-card">
-                    <div class="result-icon">
-                        <i class="fas fa-square"></i>
-                    </div>
-                    <h3 class="result-number">5000 м²</h3>
-                    <p>Покрыто геотекстилем на леднике Туюксу</p>
-                </div>
-                <div class="result-card">
-                    <div class="result-icon">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <h3 class="result-number">2 года</h3>
-                    <p>Успешного мониторинга и исследований</p>
-                </div>
-            </div>
+// Открыть чат
+if (chatFab) {
+    chatFab.addEventListener('click', () => {
+        chatWidget.style.display = 'flex';
+        chatWidget.classList.add('active');
+        chatFab.style.display = 'none';
+        console.log('Chat opened');
+    });
+}
 
-            <!-- График -->
-        <div class="result-image"><img src="./images/WhatsApp Image 2026-02-12 at 08.07.11.jpeg" alt=""></div>
+// Закрыть чат
+if (chatToggle) {
+    chatToggle.addEventListener('click', () => {
+        chatWidget.classList.remove('active');
+        setTimeout(() => {
+            chatWidget.style.display = 'none';
+            chatFab.style.display = 'flex';
+        }, 300);
+        console.log('Chat closed');
+    });
+}
 
-            <!-- Отзывы -->
-            <div class="testimonials">
-                <h3>Что говорят эксперты</h3>
-                <div class="testimonial-grid">
-                    <div class="testimonial-card">
-                        <div class="testimonial-quote">
-                            <i class="fas fa-quote-left"></i>
-                        </div>
-                        <p>"Геотекстиль показал выдающиеся результаты. Это один из самых эффективных методов сохранения ледников, который мы наблюдали."</p>
-                        <div class="testimonial-author">
-                            <strong>Доктор Айгуль Сейдахметова</strong>
-                            <span>Гляциолог, КазНУ им. Аль-Фараби</span>
-                        </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-quote">
-                            <i class="fas fa-quote-left"></i>
-                        </div>
-                        <p>"Этот проект критически важен для будущего Алматы. Сохранение ледников - это сохранение водных ресурсов города."</p>
-                        <div class="testimonial-author">
-                            <strong>Профессор Марат Беков</strong>
-                            <span>Институт географии РК</span>
-                        </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-quote">
-                            <i class="fas fa-quote-left"></i>
-                        </div>
-                        <p>"Инновационный подход с использованием геотекстиля может стать примером для других горных регионов мира."</p>
-                        <div class="testimonial-author">
-                            <strong>Доктор Жанар Кенжебаева</strong>
-                            <span>Эколог, Министерство экологии РК</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+if (chatSend) {
+    chatSend.addEventListener('click', sendChatMessage);
+}
 
-    <!-- AI Анализатор -->
-    <section id="ai-analyzer" class="section ai-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>AI Анализатор Ледников</h2>
-                <p>Загрузите фото ледника для мгновенной оценки</p>
-            </div>
+if (chatInput) {
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendChatMessage();
+        }
+    });
+}
 
-            <div class="ai-analyzer">
-                <div class="upload-area" id="uploadArea">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <h3>Загрузите фото ледника</h3>
-                    <p>или перетащите файл сюда</p>
-                    <input type="file" id="glacierImageInput" accept="image/*" hidden>
-                    <button class="upload-button" onclick="document.getElementById('glacierImageInput').click()">
-                        <i class="fas fa-upload"></i> Выбрать файл
-                    </button>
-                    <button class="camera-button" onclick="document.getElementById('cameraInput').click()">
-                        <i class="fas fa-camera"></i> Сфотографировать
-                    </button>
-                    <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
-                </div>
+function askQuestion(question) {
+    chatInput.value = question;
+    sendChatMessage();
+}
 
-                <div class="ai-result" id="aiResult" style="display: none;">
-                    <div class="result-image">
-                        <img id="uploadedImage" alt="Uploaded glacier">
-                    </div>
-                    <div class="result-analysis" id="analysisResult">
-                        <div class="loading">
-                            <div class="spinner"></div>
-                            <p>AI анализирует изображение...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+async function sendChatMessage() {
+    const message = chatInput.value.trim();
+    if (!message) return;
 
-    <!-- AI Чат-помощник -->
-    <div class="ai-chat-widget" id="aiChatWidget">
-        <div class="chat-header" id="chatHeader">
-            <div class="chat-header-content">
+    // Добавить сообщение пользователя
+    addChatMessage(message, 'user');
+    chatInput.value = '';
+
+    // Показать индикатор загрузки
+    const loadingId = addChatMessage('Думаю...', 'bot', true);
+
+    try {
+        const response = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                model: "claude-sonnet-4-20250514",
+                max_tokens: 500,
+                messages: [
+                    {
+                        role: "user",
+                        content: `Ты AI-помощник проекта "Спасение Ледников Алматы". Отвечай кратко и понятно на русском языке.
+                        
+Контекст проекта:
+- Ледники Заилийского Алатау теряют 30% массы за 50 лет
+- Мы используем геотекстиль (белое полотно) для защиты ледников
+- Геотекстиль отражает 85-90% солнечного излучения
+- Снижает таяние на 60-70%
+- Покрыто 5000 м² на леднике Туюксу
+- Проект важен для водоснабжения 2 млн человек в Алматы
+
+Вопрос пользователя: ${message}`
+                    }
+                ]
+            })
+        });
+
+        const data = await response.json();
+        const botMessage = data.content.find(item => item.type === "text")?.text || "Извините, не смог обработать ваш запрос.";
+        
+        // Удалить индикатор загрузки и добавить ответ
+        document.getElementById(loadingId).remove();
+        addChatMessage(botMessage, 'bot');
+    } catch (err) {
+        console.error("Chat error:", err);
+        document.getElementById(loadingId).remove();
+        addChatMessage('Извините, произошла ошибка. Попробуйте еще раз.', 'bot');
+    }
+}
+
+function addChatMessage(text, sender, isLoading = false) {
+    const messageId = 'msg-' + Date.now();
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}`;
+    messageDiv.id = messageId;
+    
+    if (sender === 'bot') {
+        messageDiv.innerHTML = `
+            <div class="message-avatar">
                 <i class="fas fa-robot"></i>
-                <div>
-                    <strong>AI Помощник</strong>
-                    <span>Задайте вопрос о ледниках</span>
-                </div>
             </div>
-            <button class="chat-toggle" id="chatToggle">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="chat-body" id="chatBody">
-            <div class="chat-messages" id="chatMessages">
-                <div class="chat-message bot">
-                    <div class="message-avatar">
-                        <i class="fas fa-robot"></i>
-                    </div>
-                    <div class="message-content">
-                        <p>Здравствуйте! Я AI-помощник проекта "Спасение Ледников Алматы". Задайте мне любой вопрос о ледниках, геотекстиле или нашем проекте!</p>
-                        <div class="quick-questions">
-                            <button class="quick-btn" onclick="askQuestion('Почему тают ледники?')">Почему тают ледники?</button>
-                            <button class="quick-btn" onclick="askQuestion('Как работает геотекстиль?')">Как работает геотекстиль?</button>
-                            <button class="quick-btn" onclick="askQuestion('Какие результаты проекта?')">Какие результаты?</button>
-                        </div>
-                    </div>
-                </div>
+            <div class="message-content">
+                <p>${isLoading ? '<em>' + text + '</em>' : text}</p>
             </div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Введите ваш вопрос..." />
-                <button id="chatSend">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <p>${text}</p>
             </div>
-        </div>
-    </div>
+            <div class="message-avatar" style="background: linear-gradient(135deg, #0066FF 0%, #00C9FF 100%);">
+                <i class="fas fa-user"></i>
+            </div>
+        `;
+    }
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    return messageId;
+}
 
-    <!-- Кнопка открытия чата -->
-    <button class="chat-fab" id="chatFab">
-        <i class="fas fa-comments"></i>
-    </button>
+// ============ АНИМАЦИИ ПРИ ПРОКРУТКЕ ============
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
 
-    <!-- Футер -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3><i class="fas fa-mountain"></i> Glacier Shield</h3>
-                    <p>Инновационный проект по сохранению ледников Заилийского Алатау с помощью геотекстильных технологий.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h4>Навигация</h4>
-                    <ul>
-                        <li><a href="#hero">Главная</a></li>
-                        <li><a href="#problem">Проблема</a></li>
-                        <li><a href="#solution">Решение</a></li>
-                        <li><a href="#geotextile">Геотекстиль</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Контакты</h4>
-                    <ul>
-                        <li><i class="fas fa-envelope"></i> sadyrbekyerasyl@gmail.com</li>
-                        <li><i class="fas fa-phone"></i> +7 (778) 636-14-95 Садырбек Ерасыл</li>
-                         <li><i class="fas fa-phone"></i> +7 (707) 813-72-48 Рахымгалиева Дана Ерлановна</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Алматы, Казахстан</li>
-                    </ul>
-                </div>
-             
-            <div class="footer-bottom">
-                <p>&copy; 2026 Проект "Спасение Ледников Алматы". Все права защищены.</p>
-            </div>
-        </div>
-    </footer>
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+// Наблюдать за всеми карточками
+document.querySelectorAll('.problem-card, .detail-card, .result-card, .testimonial-card').forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(30px)';
+    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(card);
+});
+
+// ============ СЧЁТЧИКИ ============
+function animateValue(element, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const value = Math.floor(progress * (end - start) + start);
+        element.textContent = value + (element.dataset.suffix || '');
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
+// Анимация статистики при появлении
+const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.dataset.animated) {
+            const number = entry.target.querySelector('h3');
+            if (number) {
+                const value = parseInt(number.textContent);
+                if (!isNaN(value)) {
+                    number.dataset.suffix = number.textContent.replace(/\d+/g, '');
+                    animateValue(number, 0, value, 2000);
+                    entry.target.dataset.animated = 'true';
+                }
+            }
+        }
+    });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-card, .result-card').forEach(card => {
+    statsObserver.observe(card);
+});
+
+console.log('🏔️ Сайт "Спасение Ледников Алматы" загружен успешно!');
