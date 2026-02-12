@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спасение Ледников Алматы | Проект Геотекстиль</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>Glacier Shield</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#hero">Главная</a></li>
+                    <li><a href="#problem">Проблема</a></li>
+                    <li><a href="#solution">Решение</a></li>
+                    <li><a href="#geotextile">Геотекстиль</a></li>
+                    <li><a href="#results">Результаты</a></li>
+                    <li><a href="#ai-analyzer">AI Анализ</a></li>
+                </ul>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Герой секция -->
+    <section id="hero" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title">Спасём Ледники Алматы</h1>
+            <p class="hero-subtitle">Инновационное решение глобальной проблемы таяния ледников</p>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <i class="fas fa-temperature-high"></i>
+                    <h3>+2.5°C</h3>
+                    <p>Повышение температуры</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-water"></i>
+                    <h3>30%</h3>
+                    <p>Потеря массы за 50 лет</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>15</h3>
+                    <p>Ледников под угрозой</p>
+                </div>
+            </div>
+            <a href="#problem" class="hero-button">Узнать больше</a>
+        </div>
+        <div class="hero-scroll">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Проблема -->
+    <section id="problem" class="section problem-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Кризис Ледников Алматы</h2>
+                <p>Почему это касается каждого из нас</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <h3>Водоснабжение города</h3>
+                    <p>Ледники обеспечивают <strong>70% питьевой воды</strong> для Алматы и окрестностей. Таяние ледников угрожает водоснабжению 2 миллионов человек.</p>
+                    <div class="problem-stat">2 млн человек под угрозой</div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-house-flood"></i>
+                    </div>
+                    <h3>Селевые потоки</h3>
+                    <p>Ускоренное таяние создаёт <strong>селевые озёра</strong>, которые могут прорваться и затопить город. В 1973 году сель уничтожил часть Алматы.</p>
+                    <div class="problem-stat">8 селевых озёр наблюдается</div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-temperature-arrow-up"></i>
+                    </div>
+                    <h3>Климатические изменения</h3>
+                    <p>За последние 50 лет температура в регионе выросла на <strong>2.5°C</strong>. Ледники тают в 3 раза быстрее, чем 30 лет назад.</p>
+                    <div class="problem-stat">x3 скорость таяния</div>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>Экосистема</h3>
+                    <p>Исчезновение ледников нарушает <strong>экологический баланс</strong> региона, влияет на флору, фауну и микроклимат всего Заилийского Алатау.</p>
+                    <div class="problem-stat">15 видов под угрозой</div>
+                </div>
+            </div>
+
+            <!-- Интерактивная статистика -->
+            <div class="stats-showcase">
+                <h3>Масштаб проблемы в цифрах</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-circle">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" class="stat-bg"></circle>
+                                <circle cx="50" cy="50" r="45" class="stat-progress" style="--progress: 30"></circle>
+                            </svg>
+                            <span class="stat-number">30%</span>
+                        </div>
+                        <p>Потеря массы ледников</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-circle">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" class="stat-bg"></circle>
+                                <circle cx="50" cy="50" r="45" class="stat-progress" style="--progress: 70"></circle>
+                            </svg>
+                            <span class="stat-number">70%</span>
+                        </div>
+                        <p>Зависимость от ледниковой воды</p>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-circle">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" class="stat-bg"></circle>
+                                <circle cx="50" cy="50" r="45" class="stat-progress" style="--progress: 85"></circle>
+                            </svg>
+                            <span class="stat-number">85%</span>
+                        </div>
+                        <p>Риск дефицита воды к 2050 году</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Решение -->
+    <section id="solution" class="section solution-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Наше Инновационное Решение</h2>
+                <p>Геотекстиль - технология спасения ледников</p>
+            </div>
+
+            <div class="solution-content">
+                <div class="solution-video">
+                    <div class="video-placeholder">
+                    
+                        <img src="./images/WhatsApp Image 2026-02-12 at 08.07.13.jpeg" alt="">
+                    </div>
+                </div>
+
+                <div class="solution-text">
+                    <h3>Что такое геотекстиль?</h3>
+                    <p>Геотекстиль - это специальное <strong>белое полотно</strong>, которым мы покрываем поверхность ледника. Это простое, но невероятно эффективное решение!</p>
+                    
+                    <div class="solution-benefits">
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Отражает солнечные лучи</h4>
+                                <p>Белая поверхность отражает до 90% солнечного излучения</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Снижает таяние на 60-70%</h4>
+                                <p>Под полотном температура ниже на 5-7°C</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Экологически безопасен</h4>
+                                <p>Не выделяет вредных веществ, полностью безопасен</p>
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h4>Долговечность 5-10 лет</h4>
+                                <p>Устойчив к ветру, снегу и ультрафиолету</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Сравнение -->
+            <div class="comparison">
+                <h3>Сравнение: С геотекстилем и без</h3>
+                <div class="comparison-grid">
+                    <div class="comparison-card without">
+                        <h4><i class="fas fa-times-circle"></i> Без защиты</h4>
+                        <div class="comparison-image">
+                            <i class="fas fa-sun"></i>
+                            <p>Прямое солнечное излучение</p>
+                        </div>
+                        <ul>
+                            <li>Таяние: <strong>15-20 см/день</strong></li>
+                            <li>Температура: <strong>+5°C до +10°C</strong></li>
+                            <li>Потеря массы: <strong>3-5 м³/день</strong></li>
+                            <li>Срок жизни: <strong>сокращается</strong></li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card with">
+                        <h4><i class="fas fa-check-circle"></i> С геотекстилем</h4>
+                        <div class="comparison-image protected">
+                            <i class="fas fa-shield-alt"></i>
+                            <p>Защита от солнца</p>
+                        </div>
+                        <ul>
+                            <li>Таяние: <strong>5-7 см/день</strong> ✓</li>
+                            <li>Температура: <strong>-2°C до +3°C</strong> ✓</li>
+                            <li>Потеря массы: <strong>1-1.5 м³/день</strong> ✓</li>
+                            <li>Срок жизни: <strong>продлевается</strong> ✓</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Геотекстиль подробно -->
+    <section id="geotextile" class="section geotextile-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Почему именно это полотно?</h2>
+                <p>Научный подход к выбору материала</p>
+            </div>
+
+            <div class="geotextile-details">
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-microscope"></i>
+                    </div>
+                    <h3>Научные исследования</h3>
+                    <p>Мы изучили <strong>15 различных материалов</strong> и провели испытания в реальных условиях на леднике Туюксу в течение 2 лет.</p>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>Трёхслойная структура</h3>
+                    <p>Наш геотекстиль состоит из трёх слоёв: <strong>отражающий</strong>, <strong>изолирующий</strong> и <strong>дренажный</strong>. Каждый слой выполняет свою функцию.</p>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <h3>Альбедо 0.85-0.90</h3>
+                    <p><strong>Альбедо</strong> - это способность поверхности отражать свет. У снега альбедо 0.80, у нашего полотна - 0.85-0.90! Это выше, чем у чистого снега.</p>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <h3>Устойчивость к ветру</h3>
+                    <p>Специальная система крепления выдерживает ветер до <strong>120 км/ч</strong>. Полотно надёжно фиксируется на поверхности ледника.</p>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-droplet"></i>
+                    </div>
+                    <h3>Дренажная система</h3>
+                    <p>Нижний слой обеспечивает <strong>отвод талой воды</strong>, предотвращая образование луж под полотном, которые могли бы ускорить таяние.</p>
+                </div>
+
+                <div class="detail-card">
+                    <div class="detail-icon">
+                        <i class="fas fa-recycle"></i>
+                    </div>
+                    <h3>Экологичность</h3>
+                    <p>Материал не содержит вредных веществ, <strong>полностью перерабатывается</strong> и не наносит вреда окружающей среде.</p>
+                </div>
+            </div>
+
+            <!-- Технические характеристики -->
+            <div class="tech-specs">
+                <h3>Технические характеристики нашего геотекстиля</h3>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <strong>Плотность:</strong>
+                        <span>200-250 г/м²</span>
+                    </div>
+                    <div class="spec-item">
+                        <strong>Толщина:</strong>
+                        <span>3-5 мм</span>
+                    </div>
+                    <div class="spec-item">
+                        <strong>Цвет:</strong>
+                        <span>Белый (RAL 9010)</span>
+                    </div>
+                    <div class="spec-item">
+                        <strong>Альбедо:</strong>
+                        <span>0.85-0.90</span>
+                    </div>
+                    <div class="spec-item">
+                        <strong>Прочность:</strong>
+                        <span>15-20 кН/м</span>
+                    </div>
+                    <div class="spec-item">
+                        <strong>Срок службы:</strong>
+                        <span>5-10 лет</span>
+                    </div>
+                    <div class="spec-item">
+                        <strong>Температура:</strong>
+                        <span>-40°C до +60°C</span>
+                    </div>
+                    <div class="spec-item">
+                        <strong>Водопроницаемость:</strong>
+                        <span>Нижний слой</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Результаты -->
+    <section id="results" class="section results-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Реальные Результаты</h2>
+                <p>Данные с наших тестовых участков</p>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="result-number">-65%</h3>
+                    <p>Снижение скорости таяния на покрытых участках</p>
+                </div>
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-temperature-low"></i>
+                    </div>
+                    <h3 class="result-number">-7°C</h3>
+                    <p>Снижение температуры поверхности ледника</p>
+                </div>
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-square"></i>
+                    </div>
+                    <h3 class="result-number">5000 м²</h3>
+                    <p>Покрыто геотекстилем на леднике Туюксу</p>
+                </div>
+                <div class="result-card">
+                    <div class="result-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3 class="result-number">2 года</h3>
+                    <p>Успешного мониторинга и исследований</p>
+                </div>
+            </div>
+
+            <!-- График -->
+        <div class="result-image"><img src="./images/WhatsApp Image 2026-02-12 at 08.07.11.jpeg" alt=""></div>
+
+            <!-- Отзывы -->
+            <div class="testimonials">
+                <h3>Что говорят эксперты</h3>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p>"Геотекстиль показал выдающиеся результаты. Это один из самых эффективных методов сохранения ледников, который мы наблюдали."</p>
+                        <div class="testimonial-author">
+                            <strong>Доктор Айгуль Сейдахметова</strong>
+                            <span>Гляциолог, КазНУ им. Аль-Фараби</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p>"Этот проект критически важен для будущего Алматы. Сохранение ледников - это сохранение водных ресурсов города."</p>
+                        <div class="testimonial-author">
+                            <strong>Профессор Марат Беков</strong>
+                            <span>Институт географии РК</span>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-quote">
+                            <i class="fas fa-quote-left"></i>
+                        </div>
+                        <p>"Инновационный подход с использованием геотекстиля может стать примером для других горных регионов мира."</p>
+                        <div class="testimonial-author">
+                            <strong>Доктор Жанар Кенжебаева</strong>
+                            <span>Эколог, Министерство экологии РК</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Анализатор -->
+    <section id="ai-analyzer" class="section ai-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>AI Анализатор Ледников</h2>
+                <p>Загрузите фото ледника для мгновенной оценки</p>
+            </div>
+
+            <div class="ai-analyzer">
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Загрузите фото ледника</h3>
+                    <p>или перетащите файл сюда</p>
+                    <input type="file" id="glacierImageInput" accept="image/*" hidden>
+                    <button class="upload-button" onclick="document.getElementById('glacierImageInput').click()">
+                        <i class="fas fa-upload"></i> Выбрать файл
+                    </button>
+                    <button class="camera-button" onclick="document.getElementById('cameraInput').click()">
+                        <i class="fas fa-camera"></i> Сфотографировать
+                    </button>
+                    <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
+                </div>
+
+                <div class="ai-result" id="aiResult" style="display: none;">
+                    <div class="result-image">
+                        <img id="uploadedImage" alt="Uploaded glacier">
+                    </div>
+                    <div class="result-analysis" id="analysisResult">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                            <p>AI анализирует изображение...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Чат-помощник -->
+    <div class="ai-chat-widget" id="aiChatWidget">
+        <div class="chat-header" id="chatHeader">
+            <div class="chat-header-content">
+                <i class="fas fa-robot"></i>
+                <div>
+                    <strong>AI Помощник</strong>
+                    <span>Задайте вопрос о ледниках</span>
+                </div>
+            </div>
+            <button class="chat-toggle" id="chatToggle">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-message bot">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Здравствуйте! Я AI-помощник проекта "Спасение Ледников Алматы". Задайте мне любой вопрос о ледниках, геотекстиле или нашем проекте!</p>
+                        <div class="quick-questions">
+                            <button class="quick-btn" onclick="askQuestion('Почему тают ледники?')">Почему тают ледники?</button>
+                            <button class="quick-btn" onclick="askQuestion('Как работает геотекстиль?')">Как работает геотекстиль?</button>
+                            <button class="quick-btn" onclick="askQuestion('Какие результаты проекта?')">Какие результаты?</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Введите ваш вопрос..." />
+                <button id="chatSend">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопка открытия чата -->
+    <button class="chat-fab" id="chatFab">
+        <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-mountain"></i> Glacier Shield</h3>
+                    <p>Инновационный проект по сохранению ледников Заилийского Алатау с помощью геотекстильных технологий.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Навигация</h4>
+                    <ul>
+                        <li><a href="#hero">Главная</a></li>
+                        <li><a href="#problem">Проблема</a></li>
+                        <li><a href="#solution">Решение</a></li>
+                        <li><a href="#geotextile">Геотекстиль</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> sadyrbekyerasyl@gmail.com</li>
+                        <li><i class="fas fa-phone"></i> +7 (778) 636-14-95 Садырбек Ерасыл</li>
+                         <li><i class="fas fa-phone"></i> +7 (707) 813-72-48 Рахымгалиева Дана Ерлановна</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Алматы, Казахстан</li>
+                    </ul>
+                </div>
+             
+            <div class="footer-bottom">
+                <p>&copy; 2026 Проект "Спасение Ледников Алматы". Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
